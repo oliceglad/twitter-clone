@@ -1,0 +1,6 @@
+flask
+sqlalchemy
+pytest
+gunicorn
+psycopg2
+python-dotenv

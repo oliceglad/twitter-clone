@@ -1,0 +1,423 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: 'Twitter-like API'
+  description: 'API documentation for a Twitter-like application.'
+
+paths:
+  /api/tweets:
+    get:
+      summary: 'Get user feed'
+      parameters:
+        - name: api-key
+          in: header
+          description: 'API key for authentication'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'User feed retrieved successfully'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+              tweets:
+                type: 'array'
+                items:
+                  type: 'object'
+                  properties:
+                    id:
+                      type: 'integer'
+                    content:
+                      type: 'string'
+                    attachments:
+                      type: 'array'
+                      items:
+                        type: 'string'
+                    author:
+                      type: 'object'
+                      properties:
+                        id:
+                          type: 'integer'
+                        name:
+                          type: 'string'
+                    likes:
+                      type: 'array'
+                      items:
+                        type: 'object'
+                        properties:
+                          user_id:
+                            type: 'integer'
+                          name:
+                            type: 'string'
+        '500':
+          description: 'Internal server error'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+              error_type:
+                type: 'string'
+              error_message:
+                type: 'string'
+    post:
+      summary: 'Create a new tweet'
+      parameters:
+        - name: api-key
+          in: header
+          description: 'API key for authentication'
+          required: true
+          type: 'string'
+        - name: tweet_data
+          in: body
+          description: 'Tweet data'
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              tweet_data:
+                type: 'string'
+              tweet_media_ids:
+                type: 'array'
+                items:
+                  type: 'integer'
+      responses:
+        '200':
+          description: 'Tweet created successfully'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+              tweet_id:
+                type: 'integer'
+        '500':
+          description: 'Internal server error'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+              error_type:
+                type: 'string'
+              error_message:
+                type: 'string'
+
+  /api/medias:
+    post:
+      summary: 'Upload media file'
+      consumes:
+        - 'multipart/form-data'
+      parameters:
+        - name: api-key
+          in: header
+          description: 'API key for authentication'
+          required: true
+          type: 'string'
+        - name: file
+          in: formData
+          description: 'Media file to upload'
+          required: true
+          type: 'file'
+      responses:
+        '200':
+          description: 'Media file uploaded successfully'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+              media_id:
+                type: 'integer'
+        '500':
+          description: 'Internal server error'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+              error_type:
+                type: 'string'
+              error_message:
+                type: 'string'
+
+  '/api/tweets/{id}':
+    delete:
+      summary: 'Delete tweet by ID'
+      parameters:
+        - name: id
+          in: path
+          description: 'ID of the tweet to delete'
+          required: true
+          type: 'integer'
+        - name: api-key
+          in: header
+          description: 'API key for authentication'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'Tweet deleted successfully'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+        '500':
+          description: 'Internal server error'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+              error_type:
+                type: 'string'
+              error_message:
+                type: 'string'
+
+  '/api/tweets/{id}/likes':
+    post:
+      summary: 'Like a tweet'
+      parameters:
+        - name: id
+          in: path
+          description: 'ID of the tweet to like'
+          required: true
+          type: 'integer'
+        - name: api-key
+          in: header
+          description: 'API key for authentication'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'Action performed successfully'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+        '500':
+          description: 'Internal server error'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+              error_type:
+                type: 'string'
+              error_message:
+                type: 'string'
+    delete:
+      summary: 'Unlike a tweet'
+      parameters:
+        - name: id
+          in: path
+          description: 'ID of the tweet to unlike'
+          required: true
+          type: 'integer'
+        - name: api-key
+          in: header
+          description: 'API key for authentication'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'Action performed successfully'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+        '500':
+          description: 'Internal server error'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+              error_type:
+                type: 'string'
+              error_message:
+                type: 'string'
+
+  '/api/users/{id}/follow':
+    delete:
+      summary: 'Unfollow another user'
+      parameters:
+        - name: id
+          in: path
+          description: 'ID of the user to unfollow'
+          required: true
+          type: 'integer'
+        - name: api-key
+          in: header
+          description: 'API key for authentication'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'Action performed successfully'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+        '500':
+          description: 'Internal server error'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+              error_type:
+                type: 'string'
+              error_message:
+                type: 'string'
+    post:
+      summary: 'Follow another user'
+      parameters:
+        - name: id
+          in: path
+          description: 'ID of the user to follow'
+          required: true
+          type: 'integer'
+        - name: api-key
+          in: header
+          description: 'API key for authentication'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'Action performed successfully'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+        '500':
+          description: 'Internal server error'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'boolean'
+              error_type:
+                type: 'string'
+              error_message:
+                type: 'string'
+
+  /api/users/me:
+    get:
+      summary: 'Get user profile'
+      parameters:
+        - name: api-key
+          in: header
+          description: 'API key for authentication'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'User profile retrieved successfully'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'string'
+              user:
+                type: 'object'
+                properties:
+                  id:
+                    type: 'integer'
+                  name:
+                    type: 'string'
+                  followers:
+                    type: 'array'
+                    items:
+                      type: 'object'
+                      properties:
+                        id:
+                          type: 'integer'
+                        name:
+                          type: 'string'
+                  following:
+                    type: 'array'
+                    items:
+                      type: 'object'
+                      properties:
+                        id:
+                          type: 'integer'
+                        name:
+                          type: 'string'
+        '500':
+          description: 'Internal server error'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'string'
+              error_type:
+                type: 'string'
+              error_message:
+                type: 'string'
+
+  '/api/users/{id}':
+    get:
+      summary: 'Get user profile by ID'
+      parameters:
+        - name: id
+          in: path
+          description: 'ID of the user to retrieve'
+          required: true
+          type: 'integer'
+        - name: api-key
+          in: header
+          description: 'API key for authentication'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'User profile retrieved successfully'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'string'
+              user:
+                type: 'object'
+                properties:
+                  id:
+                    type: 'integer'
+                  name:
+                    type: 'string'
+                  followers:
+                    type: 'array'
+                    items:
+                      type: 'object'
+                      properties:
+                        id:
+                          type: 'integer'
+                        name:
+                          type: 'string'
+                  following:
+                    type: 'array'
+                    items:
+                      type: 'object'
+                      properties:
+                        id:
+                          type: 'integer'
+                        name:
+                          type: 'string'
+        '500':
+          description: 'Internal server error'
+          schema:
+            type: 'object'
+            properties:
+              result:
+                type: 'string'
+              error_type:
+                type: 'string'
+              error_message:
+                type: 'string'
