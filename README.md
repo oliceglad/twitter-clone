@@ -10,7 +10,7 @@ Python, Flask
 1. Убедитесь, что у вас установлен и запущен **Docker**.
 2. Склонируйте этот репозиторий: 
     ```shell
-   git clone https://gitlab.skillbox.ru/viacheslav_chuchmanov/python_advanced_diploma.git
+   git clone https://github.com/oliceglad/twitter-clone
    ```
 3. Перейдите в склонированную папку используя терминал
 4. Создайте файл .env и добавьте DATABASE переменную, эта переменная определяет движок SQLAlchemy.
